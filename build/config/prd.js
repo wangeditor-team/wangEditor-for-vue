@@ -37,6 +37,6 @@ export default {
     sourcemap: true,
     ...output,
   },
+  external: ['vue', '@wangeditor/editor'],
   plugins: finalPlugins,
-  external: ['Vue', '@wangeditor/editor'],
 }

@@ -1,6 +1,6 @@
 {
   "name": "@wangeditor/editor-for-vue",
-  "version": "0.0.3",
+  "version": "0.6.11",
   "description": "wangEditor component for vue2.x",
   "author": "wangfupeng1988 <wangfupeng1988@163.com>",
   "contributors": [],
@@ -8,10 +8,10 @@
   "license": "MIT",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.esm.js",
   "browser": {
     "./dist/index.js": "./dist/index.js",
-    "./dist/index.mjs": "./dist/index.mjs"
+    "./dist/index.esm.js": "./dist/index.esm.js"
   },
   "directories": {
     "lib": "dist",
@@ -24,7 +24,7 @@
     "wangEditor",
     "富文本编辑器",
     "富文本",
-    "vue3"
+    "vue2"
   ],
   "repository": {
     "type": "git",
@@ -66,6 +66,7 @@
     "cssnano": "^5.0.10",
     "lodash": "^4.17.21",
     "postcss": "^8.3.11",
+    "release-it": "^14.11.6",
     "rollup": "^2.59.0",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-copy": "^3.4.0",
@@ -80,10 +81,10 @@
     "rollup-plugin-vue": "^6.0.0",
     "ts-jest": "^27.0.4",
     "tslib": "^2.3.0",
-    "typescript": "^4.4.4"
+    "typescript": "^4.4.4",
+    "jest": "^27.3.1"
   },
   "dependencies": {
-    "event-emitter": "^0.3.5",
-    "release-it": "^14.11.6"
+    "event-emitter": "^0.3.5"
   }
 }

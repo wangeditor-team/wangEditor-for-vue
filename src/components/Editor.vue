@@ -1,6 +1,5 @@
 <script lang="ts">
 import Vue from 'vue';
-import * as wangEditor from '@wangeditor/editor';
 import { createEditor } from '@wangeditor/editor';
 import emitter from '../utils/emitter';
 import { recordEditor } from '../utils/editor-map';
@@ -31,8 +30,7 @@ export default Vue.extend({
 
       const defaultConfig = this.defaultConfig || {};
 
-      // TODO 这里为何不能直接用 createEditor ？？？
-      wangEditor.createEditor({
+      createEditor({
         selector: this.$refs.box as Element,
         config: {
           ...defaultConfig,

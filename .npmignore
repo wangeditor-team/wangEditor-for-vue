@@ -1,0 +1,11 @@
+.github/
+.vscode
+build/
+doc/
+docs/
+example/
+__tests__/
+.release-it.js
+index.html
+tsconfig.json
+src/

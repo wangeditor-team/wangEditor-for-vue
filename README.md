@@ -33,12 +33,10 @@ import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 
 ## 开发
 
-先打包 packages/editor
-  - `cd ../editor`
-  - `yarn dev` 或 `yarn build`
+1. 安装依赖
+  - `yarn`
 
-再操作当前包
+2. 运行文件
   - 打包 `yarn dev` 或 `yarn build`
   - 或运行 example `yarn example`
 
-------

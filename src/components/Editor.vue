@@ -4,7 +4,7 @@ import { createEditor } from '@wangeditor/editor';
 import emitter from '../utils/emitter';
 import { recordEditor } from '../utils/editor-map';
 
-function genErrorInfo(fnName: string): string {
+function genErrorInfo(fnName: string) {
   let info = `请使用 '@${fnName}' 事件，不要放在 props 中`;
   info += `\nPlease use '@${fnName}' event instead of props`;
   return info;
@@ -12,8 +12,9 @@ function genErrorInfo(fnName: string): string {
 
 export default Vue.extend({
   //【注意】单独写 <template>...</template> 时，rollup 打包完浏览器运行时报错，所以先在这里写 template
-  template: '<div ref="box"></div>',
-
+  render(h) {
+    return h('div', { ref: 'box' });
+  },
   name: 'Editor',
   props: ['editorId', 'defaultContent', 'defaultConfig', 'mode'],
   created() {
@@ -88,6 +89,17 @@ export default Vue.extend({
               const info = genErrorInfo('customAlert');
               throw new Error(info);
             }
+          },
+          customPaste: (editor, event) => {
+            if (defaultConfig.customPaste) {
+              const info = genErrorInfo('customPaste');
+              throw new Error(info);
+            }
+            let res;
+            this.$emit('customPaste', editor, event, (val: any) => {
+              res = val;
+            });
+            return res;
           },
         },
         content: this.defaultContent || [],

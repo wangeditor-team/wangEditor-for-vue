@@ -1,17 +1,21 @@
-import path from 'path'
-import commonjs from '@rollup/plugin-commonjs'
-import json from '@rollup/plugin-json'
-import nodeResolve from '@rollup/plugin-node-resolve'
-import typescript from 'rollup-plugin-typescript2'
-import replace from '@rollup/plugin-replace'
-import peerDepsExternal from 'rollup-plugin-peer-deps-external'
-import vuePlugin from 'rollup-plugin-vue'
+import path from 'path';
+import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
+import nodeResolve from '@rollup/plugin-node-resolve';
+import typescript from 'rollup-plugin-typescript2';
+import replace from '@rollup/plugin-replace';
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
+import vuePlugin from 'rollup-plugin-vue';
 
-export const extensions = ['.js', '.jsx', '.ts', '.tsx', '.vue']
+export const extensions = ['.js', '.jsx', '.ts', '.tsx', '.vue'];
 
 export default {
   input: path.resolve(__dirname, './src/index.ts'),
-  output: {},
+  output: {
+    globals: {
+      vue: 'Vue',
+    },
+  },
   plugins: [
     peerDepsExternal(), // 打包结果不包含 package.json 的 peerDependencies
     json({
@@ -37,4 +41,4 @@ export default {
     }),
     // del({ targets: 'dist/*' }),
   ],
-}
+};

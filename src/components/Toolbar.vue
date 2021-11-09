@@ -5,10 +5,10 @@ import emitter from '../utils/emitter';
 import { getEditor } from '../utils/editor-map';
 
 export default Vue.extend({
-  //【注意】单独写 <template>...</template> 时，rollup 打包完浏览器运行时报错，所以先在这里写 template
-  template: '<div ref="box"></div>',
-
   name: 'Toolbar',
+  render(h) {
+    return h('div', { ref: 'box' });
+  },
   props: ['editorId', 'defaultConfig', 'mode'],
   created() {
     if (this.editorId == null) {

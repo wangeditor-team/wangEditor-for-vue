@@ -1,42 +1,45 @@
-<script lang="ts">
-import Vue from 'vue'
-import { getEditor, removeEditor, Editor, Toolbar } from '../../src/index'
+<template>
+  <div>
+    <div>
+      <button @click="onToggleReadOnly">toggle readOnly</button>
+      <button @click="onGetHtml">get html</button>
+    </div>
+
+    <div style="border: 1px solid #ccc; margin-top: 10px">
+      <Toolbar
+        style="border-bottom: 1px solid #ccc"
+        :editorId="editorId"
+        :defaultConfig="toolbarConfig"
+        :mode="mode"
+      />
+
+      <Editor
+        style="height: 500px"
+        :editorId="editorId"
+        :defaultConfig="editorConfig"
+        :defaultContent="defaultContent"
+        :mode="mode"
+        @onCreated="onCreated"
+        @onChange="onChange"
+        @onDestroyed="onDestroyed"
+        @onMaxLength="onMaxLength"
+        @onFocus="onFocus"
+        @onBlur="onBlur"
+        @customAlert="customAlert"
+        @customPaste="customPaste"
+      />
+    </div>
+
+    <div style="border: 1px solid #ccc; margin-top: 10px">
+      <pre v-html="curContentStr"></pre>
+    </div>
+  </div>
+</template>
+<script>
+import Vue from 'vue';
+import { getEditor, removeEditor, Editor, Toolbar } from '../../src/index';
 
 export default Vue.extend({
-  //【注意】单独写 <template>...</template> 时，rollup 打包完浏览器运行时报错，所以先在这里写 template
-  template: `
-    <div>
-      <div>
-        <button @click="onToggleReadOnly">toggle readOnly</button>
-        <button @click="onGetHtml">get html</button>
-      </div>
-
-      <div style="border: 1px solid #ccc; margin-top: 10px;">
-        <Toolbar :editorId="editorId" :defaultConfig="toolbarConfig" :mode="mode"/>
-      </div>
-
-      <div style="border: 1px solid #ccc; margin-top: 10px;">
-        <Editor
-          :editorId="editorId"
-          :defaultConfig="editorConfig"
-          :defaultContent="defaultContent"
-          :mode="mode"
-          @onCreated="onCreated"
-          @onChange="onChange"
-          @onDestroyed="onDestroyed"
-          @onMaxLength="onMaxLength"
-          @onFocus="onFocus"
-          @onBlur="onBlur"
-          @customAlert="customAlert"
-        />
-      </div>
-
-      <div style="border: 1px solid #ccc; margin-top: 10px;">
-        <pre v-html="curContentStr"></pre>
-      </div>
-    </div>
-  `,
-
   components: { Editor, Toolbar },
   data() {
     return {
@@ -54,80 +57,85 @@ export default Vue.extend({
             fieldName: 'vue-demo-fileName',
           },
           insertImage: {
-            checkImage(src: string, alt: string, href: string): boolean | string | undefined {
+            checkImage(src, alt, href) {
               if (src.indexOf('http') !== 0) {
-                return '图片网址必须以 http/https 开头'
+                return '图片网址必须以 http/https 开头';
               }
-              return true
-            }
-          }
-        }
+              return true;
+            },
+          },
+        },
       },
       curContent: [],
       mode: 'default',
-    }
+    };
   },
   computed: {
     curContentStr() {
       // @ts-ignore
-      return JSON.stringify(this.curContent, null, 2)
+      return JSON.stringify(this.curContent, null, 2);
     },
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     //【注意】vue 和 React 不一样，无法在 props 传递事件，所以 callbacks 只能单独定义，通过事件传递
     onCreated(editor) {
-      console.log('onCreated', editor)
-      // this.editor = editor
+      // console.log('onCreated', editor)
     },
     onChange(editor) {
-      console.log('onChange', editor.children)
-      this.curContent = editor.children
+      console.log('onChange', editor.children);
+      this.curContent = editor.children;
     },
     onDestroyed(editor) {
-      console.log('onDestroyed', editor)
+      console.log('onDestroyed', editor);
     },
     onMaxLength(editor) {
-      console.log('onMaxLength', editor)
+      console.log('onMaxLength', editor);
     },
     onFocus(editor) {
-      console.log('onFocus', editor)
+      console.log('onFocus', editor);
     },
     onBlur(editor) {
-      console.log('onBlur', editor)
+      console.log('onBlur', editor);
     },
-    customAlert(info: string, type: string) {
-      window.alert(`customAlert in Vue demo\n${type}:\n${info}`)
+    customAlert(info, type) {
+      window.alert(`customAlert in Vue demo\n${type}:\n${info}`);
+    },
+    customPaste(editor, event, callback) {
+      // console.log('paste event', event)
+      // editor.insertText('xxx')
+      // // 返回值（注意，vue 事件的返回值，不能用 return）
+      // callback(false)
+      // // callback(true)
     },
 
     onToggleReadOnly() {
-      const editor = getEditor(this.editorId)
-      if (editor == null) return
+      const editor = getEditor(this.editorId);
+      if (editor == null) return;
 
       if (editor.getConfig().readOnly) {
-        editor.enable()
+        editor.enable();
       } else {
-        editor.disable()
+        editor.disable();
       }
     },
     onGetHtml() {
-      const editor = getEditor(this.editorId)
-      if (editor == null) return
+      const editor = getEditor(this.editorId);
+      if (editor == null) return;
 
       // 使用 editor API
-      console.log(editor.getHtml())
+      console.log(editor.getHtml());
     },
   },
 
   // 及时销毁 editor
   beforeDestroy() {
-    const editor = getEditor(this.editorId)
-    if (editor == null) return
+    const editor = getEditor(this.editorId);
+    if (editor == null) return;
 
     // 销毁，并移除 editor
-    editor.destroy()
-    removeEditor(this.editorId)
-  }
-})
+    editor.destroy();
+    removeEditor(this.editorId);
+  },
+});
 </script>

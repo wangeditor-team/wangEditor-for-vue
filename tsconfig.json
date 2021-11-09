@@ -11,13 +11,5 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"]
   },
-  "exclude": [
-    "node_modules",
-    "build",
-    "__tests__",
-    "dist",
-    "dist-example",
-    "example",
-    "rollup.*"
-  ]
+  "exclude": ["node_modules", "build", "__tests__", "dist", "dist-example", "example", "rollup.*"]
 }

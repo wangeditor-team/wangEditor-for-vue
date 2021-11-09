@@ -1,24 +1,31 @@
-<script lang="ts">
-import Vue from 'vue'
-import { getEditor, removeEditor, Editor, Toolbar } from '../../src/index'
+<template>
+  <div>
+    <div style="border: 1px solid #ccc; margin-top: 10px">
+      <Toolbar
+        style="border-bottom: 1px solid #ccc"
+        :editorId="editorId"
+        :defaultConfig="toolbarConfig"
+        :mode="mode"
+      />
+
+      <Editor
+        style="height: 500px"
+        :editorId="editorId"
+        :defaultConfig="editorConfig"
+        :defaultContent="defaultContent"
+        :mode="mode"
+      />
+    </div>
+  </div>
+</template>
+<script>
+import Vue from 'vue';
+import { getEditor, removeEditor, Editor, Toolbar } from '../../src/index';
 
 export default Vue.extend({
   //【注意】单独写 <template>...</template> 时，rollup 打包完浏览器运行时报错，所以先在这里写 template
   template: `
-    <div>
-      <div style="border: 1px solid #ccc; margin-top: 10px;">
-        <Toolbar :editorId="editorId" :defaultConfig="toolbarConfig" :mode="mode"/>
-      </div>
-
-      <div style="border: 1px solid #ccc; margin-top: 10px;">
-        <Editor
-          :editorId="editorId"
-          :defaultConfig="editorConfig"
-          :defaultContent="defaultContent"
-          :mode="mode"
-        />
-      </div>
-    </div>
+    
   `,
 
   components: { Editor, Toolbar },
@@ -29,7 +36,7 @@ export default Vue.extend({
 
       defaultContent: [
         { type: 'paragraph', children: [{ text: 'simple mode' }] },
-        { type: 'paragraph', children: [{ text: '简化 toolbar 和 hoverbar' }] }
+        { type: 'paragraph', children: [{ text: '简化 toolbar 和 hoverbar' }] },
       ],
       curContent: [],
 
@@ -40,21 +47,19 @@ export default Vue.extend({
         placeholder: '请输入内容123...',
       },
       mode: 'simple',
-    }
+    };
   },
-  mounted() {
-  },
-  methods: {
-  },
+  mounted() {},
+  methods: {},
 
   // 及时销毁 editor
   beforeDestroy() {
-    const editor = getEditor(this.editorId)
-    if (editor == null) return
+    const editor = getEditor(this.editorId);
+    if (editor == null) return;
 
     // 销毁，并移除 editor
-    editor.destroy()
-    removeEditor(this.editorId)
-  }
-})
+    editor.destroy();
+    removeEditor(this.editorId);
+  },
+});
 </script>

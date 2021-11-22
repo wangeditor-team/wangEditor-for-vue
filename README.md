@@ -8,13 +8,16 @@
 1. 安装依赖
 
 ```shell
-npm i @wangeditor/editor-for-vue --save
+yarn add @wangeditor/editor-for-vue
+# 或者npm install @wangeditor/editor-for-vue --save
 ```
 
 2. 安装核心包
 
 ```shell
-npm i @wangeditor/editor --save
+yarn add @wangeditor/editor
+
+# 或者 npm install @wangeditor/editor --se
 ```
 
 3. 导入组件

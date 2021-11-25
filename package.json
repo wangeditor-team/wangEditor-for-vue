@@ -45,7 +45,7 @@
     "url": "https://github.com/wangeditor-team/we-2021/issues"
   },
   "peerDependencies": {
-    "@wangeditor/editor": "^0.10.3",
+    "@wangeditor/editor": "^0.12.7",
     "vue": "^2.6.14"
   },
   "devDependencies": {
@@ -60,7 +60,6 @@
     "@types/event-emitter": "^0.3.3",
     "@types/vue": "^2.0.0",
     "@vue/compiler-sfc": "^3.2.21",
-    "@wangeditor/editor": "^0.10.3",
     "autoprefixer": "^10.4.0",
     "cross-env": "^7.0.3",
     "cssnano": "^5.0.10",

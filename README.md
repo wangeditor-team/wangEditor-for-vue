@@ -4,27 +4,27 @@
 
 [English documentation](./README-en.md)
 
-## Introduction
+## 介绍
 
-An out-of-the-box vue2 component based on the [wangEditor v5](https://www.wangeditor.com/v5/guide/for-frame.html#vue2)
+基于 [wangEditor](https://www.wangeditor.com/v5/) 封装的开箱即用的 [vue2 组件](https://www.wangeditor.com/v5/guide/for-frame.html#vue2)
 
-## Installation
+## 安装
 
-1. Install the `wangeditor` core package
+1. 安装 `wangeditor` 核心包
 
 ```shell
 yarn add @wangeditor/editor
 ```
 
-2. Install the current component package
+2. 安装组件包
 
 ```shell
 yarn add @wangeditor/editor-for-vue
 ```
 
-## Usage
+## 使用
 
-### template
+### 模板
 
 ```html
 <div>
@@ -32,7 +32,7 @@ yarn add @wangeditor/editor-for-vue
     <button @click="insertText">insert text</button>
   </div>
   <div style="border: 1px solid #ccc;">
-    <!-- toolbar -->
+    <!-- 工具栏 -->
     <Toolbar
       style="border-bottom: 1px solid #ccc"
       :editorId="editorId"
@@ -40,7 +40,7 @@ yarn add @wangeditor/editor-for-vue
       :mode="mode"
     />
 
-    <!-- editor -->
+    <!-- 编辑器 -->
     <Editor
       style="height: 500px"
       :editorId="editorId"
@@ -72,24 +72,24 @@ export default Vue.extend({
   components: { Editor, Toolbar },
   data() {
     return {
-      // Particular attention:
-      // 1. `editorId` is used to relate Toolbar and Editor
-      // 2. When you create multiple editors in one page, every editor must be unique
+      //【特别注意】
+      // 1. editorId Toolbar 和 Editor 的关联，要保持一致
+      // 2. 多个编辑器时，每个的 editorId 要唯一
       editorId: 'w-e-1',
 
       toolbarConfig: {
-        /* toolbar config */
+        /* 工具栏配置 */
       },
       defaultContent: [
         {
           type: 'paragraph',
-          children: [{ text: 'hello world' }],
+          children: [{ text: '一行文字' }],
         },
       ],
       editorConfig: {
-        placeholder: 'Type your text',
-        // other editor config
-        // menus config
+        placeholder: '请输入内容...',
+        // 其他编辑器配置
+        // 菜单配置
       },
       mode: 'default', // or 'simple'
       curContent: [],
@@ -97,7 +97,7 @@ export default Vue.extend({
   },
 
   computed: {
-    // Deep clone `content`
+    // 注意，深度拷贝 content ，否则会报错
     getDefaultContent() {
       return cloneDeep(this.defaultContent);
     },
@@ -127,33 +127,33 @@ export default Vue.extend({
       window.alert(`customAlert in Vue demo\n${type}:\n${info}`);
     },
     customPaste(editor, event, callback) {
-      console.log('ClipboardEvent is paste event data', event);
+      console.log('ClipboardEvent 粘贴事件对象', event);
 
-      // insert your custom text
+      // 自定义插入内容
       editor.insertText('xxx');
 
-      // You can not `return xxx` in Vue event function, use `callback`
-      callback(false); // return false ，prevent default paste behavior
-      // callback(true) // return true ，go on default paste behavior
+      // 返回值（注意，vue 事件的返回值，不能用 return）
+      callback(false); // 返回 false ，阻止默认粘贴行为
+      // callback(true) // 返回 true ，继续默认的粘贴行为
     },
 
     insertText() {
-      // get editor instance by `editorId`
+      // 获取 editor 实例，即可执行 editor API
       const editor = getEditor(this.editorId);
       if (editor == null) return;
       if (editor.selection == null) return;
 
-      // Insert text in selection
-      editor.insertText('hello wangEditor.');
+      // 在选区插入一段文字
+      editor.insertText('一段文字');
     },
   },
 
-  // Timely destroy editor
+  // 及时销毁 editor
   beforeDestroy() {
     const editor = getEditor(this.editorId);
     if (editor == null) return;
 
-    // destroy and remove editor
+    // 销毁，并移除 editor
     editor.destroy();
     removeEditor(this.editorId);
   },

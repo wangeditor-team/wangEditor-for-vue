@@ -25,7 +25,7 @@ yarn add @wangeditor/editor-for-vue
 
 ## Usage
 
-### template
+### Template
 
 ```html
 <div>
@@ -95,7 +95,7 @@ export default Vue.extend({
       const editor = getEditor(this.editorId);
       if (editor == null) return;
 
-      // destroy and remove editor
+      // Destroy and remove editor
       editor.destroy();
       removeEditor(this.editorId);
     },

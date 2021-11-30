@@ -37,7 +37,6 @@ yarn add @wangeditor/editor-for-vue
       style="border-bottom: 1px solid #ccc"
       :editorId="editorId"
       :defaultConfig="toolbarConfig"
-      :mode="mode"
     />
 
     <!-- 编辑器 -->
@@ -46,15 +45,7 @@ yarn add @wangeditor/editor-for-vue
       :editorId="editorId"
       :defaultConfig="editorConfig"
       :defaultContent="getDefaultContent"
-      :mode="mode"
-      @onCreated="onCreated"
       @onChange="onChange"
-      @onDestroyed="onDestroyed"
-      @onMaxLength="onMaxLength"
-      @onFocus="onFocus"
-      @onBlur="onBlur"
-      @customAlert="customAlert"
-      @customPaste="customPaste"
     />
   </div>
 </div>
@@ -76,23 +67,11 @@ export default Vue.extend({
       // 1. editorId Toolbar 和 Editor 的关联，要保持一致
       // 2. 多个编辑器时，每个的 editorId 要唯一
       editorId: 'w-e-1',
-
-      toolbarConfig: {
-        /* 工具栏配置 */
-      },
-      defaultContent: [
-        {
-          type: 'paragraph',
-          children: [{ text: '一行文字' }],
-        },
-      ],
+      toolbarConfig: {},
+      defaultContent: [],
       editorConfig: {
         placeholder: '请输入内容...',
-        // 其他编辑器配置
-        // 菜单配置
       },
-      mode: 'default', // or 'simple'
-      curContent: [],
     };
   },
 
@@ -104,58 +83,17 @@ export default Vue.extend({
   },
 
   methods: {
-    onCreated(editor) {
-      console.log('onCreated', editor);
-    },
     onChange(editor) {
       console.log('onChange', editor.children);
       this.curContent = editor.children;
     },
-    onDestroyed(editor) {
-      console.log('onDestroyed', editor);
-    },
-    onMaxLength(editor) {
-      console.log('onMaxLength', editor);
-    },
-    onFocus(editor) {
-      console.log('onFocus', editor);
-    },
-    onBlur(editor) {
-      console.log('onBlur', editor);
-    },
-    customAlert(info: string, type: string) {
-      window.alert(`customAlert in Vue demo\n${type}:\n${info}`);
-    },
-    customPaste(editor, event, callback) {
-      console.log('ClipboardEvent 粘贴事件对象', event);
-
-      // 自定义插入内容
-      editor.insertText('xxx');
-
-      // 返回值（注意，vue 事件的返回值，不能用 return）
-      callback(false); // 返回 false ，阻止默认粘贴行为
-      // callback(true) // 返回 true ，继续默认的粘贴行为
-    },
-
-    insertText() {
-      // 获取 editor 实例，即可执行 editor API
+    // 及时销毁 editor
+    beforeDestroy() {
       const editor = getEditor(this.editorId);
       if (editor == null) return;
-      if (editor.selection == null) return;
-
-      // 在选区插入一段文字
-      editor.insertText('一段文字');
+      // 销毁，并移除 editor
+      editor.destroy();
+      removeEditor(this.editorId);
     },
-  },
-
-  // 及时销毁 editor
-  beforeDestroy() {
-    const editor = getEditor(this.editorId);
-    if (editor == null) return;
-
-    // 销毁，并移除 editor
-    editor.destroy();
-    removeEditor(this.editorId);
-  },
 });
 ```

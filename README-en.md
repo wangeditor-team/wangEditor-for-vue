@@ -37,7 +37,6 @@ yarn add @wangeditor/editor-for-vue
       style="border-bottom: 1px solid #ccc"
       :editorId="editorId"
       :defaultConfig="toolbarConfig"
-      :mode="mode"
     />
 
     <!-- editor -->
@@ -46,15 +45,7 @@ yarn add @wangeditor/editor-for-vue
       :editorId="editorId"
       :defaultConfig="editorConfig"
       :defaultContent="getDefaultContent"
-      :mode="mode"
-      @onCreated="onCreated"
       @onChange="onChange"
-      @onDestroyed="onDestroyed"
-      @onMaxLength="onMaxLength"
-      @onFocus="onFocus"
-      @onBlur="onBlur"
-      @customAlert="customAlert"
-      @customPaste="customPaste"
     />
   </div>
 </div>
@@ -76,22 +67,11 @@ export default Vue.extend({
       // 1. `editorId` is used to relate Toolbar and Editor
       // 2. When you create multiple editors in one page, every editor must be unique
       editorId: 'w-e-1',
-
-      toolbarConfig: {
-        /* toolbar config */
-      },
-      defaultContent: [
-        {
-          type: 'paragraph',
-          children: [{ text: 'hello world' }],
-        },
-      ],
+      toolbarConfig: {},
+      defaultContent: [],
       editorConfig: {
         placeholder: 'Type your text',
-        // other editor config
-        // menus config
       },
-      mode: 'default', // or 'simple'
       curContent: [],
     };
   },
@@ -104,58 +84,19 @@ export default Vue.extend({
   },
 
   methods: {
-    onCreated(editor) {
-      console.log('onCreated', editor);
-    },
+
     onChange(editor) {
       console.log('onChange', editor.children);
       this.curContent = editor.children;
     },
-    onDestroyed(editor) {
-      console.log('onDestroyed', editor);
-    },
-    onMaxLength(editor) {
-      console.log('onMaxLength', editor);
-    },
-    onFocus(editor) {
-      console.log('onFocus', editor);
-    },
-    onBlur(editor) {
-      console.log('onBlur', editor);
-    },
-    customAlert(info: string, type: string) {
-      window.alert(`customAlert in Vue demo\n${type}:\n${info}`);
-    },
-    customPaste(editor, event, callback) {
-      console.log('ClipboardEvent is paste event data', event);
-
-      // insert your custom text
-      editor.insertText('xxx');
-
-      // You can not `return xxx` in Vue event function, use `callback`
-      callback(false); // return false ，prevent default paste behavior
-      // callback(true) // return true ，go on default paste behavior
-    },
-
-    insertText() {
-      // get editor instance by `editorId`
+    // Timely destroy editor
+    beforeDestroy() {
       const editor = getEditor(this.editorId);
       if (editor == null) return;
-      if (editor.selection == null) return;
 
-      // Insert text in selection
-      editor.insertText('hello wangEditor.');
+      // destroy and remove editor
+      editor.destroy();
+      removeEditor(this.editorId);
     },
-  },
-
-  // Timely destroy editor
-  beforeDestroy() {
-    const editor = getEditor(this.editorId);
-    if (editor == null) return;
-
-    // destroy and remove editor
-    editor.destroy();
-    removeEditor(this.editorId);
-  },
 });
 ```

@@ -2,29 +2,30 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebook/react/blob/main/LICENSE) [![npm](https://img.shields.io/npm/v/@wangeditor/editor-for-vue.svg)](https://www.npmjs.com/package/@wangeditor/editor-for-vue/v/next) [![build status](https://github.com/wangeditor-team/wangEditor-for-vue/actions/workflows/npm-publish.yml/badge.svg?branch=main)](https://github.com/wangeditor-team/wangEditor-for-vue/actions)
 
-[English documentation](./README-en.md)
+[中文文档](./README.md)
 
-## 介绍
+## Introduction
 
-基于 [wangEditor](https://www.wangeditor.com/v5/) 封装的开箱即用的 [vue2 组件](https://www.wangeditor.com/v5/guide/for-frame.html#vue2)
+An out-of-the-box [vue2 component](https://www.wangeditor.com/v5/guide/for-frame.html#vue2)
+based on the [wangEditor v5](https://www.wangeditor.com/v5/guide/for-frame.html#vue2)
 
-## 安装
+## Installation
 
-1. 安装 `wangeditor` 核心包
+1. Install the `wangeditor` core package
 
 ```shell
 yarn add @wangeditor/editor
 ```
 
-2. 安装组件包
+2. Install the current component package
 
 ```shell
 yarn add @wangeditor/editor-for-vue
 ```
 
-## 使用
+## Usage
 
-### 模板
+### Template
 
 ```html
 <div>
@@ -32,14 +33,14 @@ yarn add @wangeditor/editor-for-vue
     <button @click="insertText">insert text</button>
   </div>
   <div style="border: 1px solid #ccc;">
-    <!-- 工具栏 -->
+    <!-- toolbar -->
     <Toolbar
       style="border-bottom: 1px solid #ccc"
       :editorId="editorId"
       :defaultConfig="toolbarConfig"
     />
 
-    <!-- 编辑器 -->
+    <!-- editor -->
     <Editor
       style="height: 500px"
       :editorId="editorId"
@@ -63,35 +64,38 @@ export default Vue.extend({
   components: { Editor, Toolbar },
   data() {
     return {
-      //【特别注意】
-      // 1. editorId Toolbar 和 Editor 的关联，要保持一致
-      // 2. 多个编辑器时，每个的 editorId 要唯一
+      // Particular attention:
+      // 1. `editorId` is used to relate Toolbar and Editor
+      // 2. When you create multiple editors in one page, every editor must be unique
       editorId: 'w-e-1',
       toolbarConfig: {},
       defaultContent: [],
       editorConfig: {
-        placeholder: '请输入内容...',
+        placeholder: 'Type your text',
       },
+      curContent: [],
     };
   },
 
   computed: {
-    // 注意，深度拷贝 content ，否则会报错
+    // Deep clone `content`
     getDefaultContent() {
       return cloneDeep(this.defaultContent);
     },
   },
 
   methods: {
+
     onChange(editor) {
       console.log('onChange', editor.children);
       this.curContent = editor.children;
     },
-    // 及时销毁 editor
+    // Timely destroy editor
     beforeDestroy() {
       const editor = getEditor(this.editorId);
       if (editor == null) return;
-      // 销毁，并移除 editor
+
+      // Destroy and remove editor
       editor.destroy();
       removeEditor(this.editorId);
     },

@@ -45,7 +45,7 @@
     "url": "https://github.com/wangeditor-team/we-2021/issues"
   },
   "peerDependencies": {
-    "@wangeditor/editor": "^0.13.1",
+    "@wangeditor/editor": "^0.13.3",
     "vue": "^2.6.14"
   },
   "devDependencies": {
@@ -84,7 +84,7 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "@wangeditor/editor": "^0.13.1",
+    "@wangeditor/editor": "^0.13.3",
     "event-emitter": "^0.3.5",
     "vue-template-compiler": "^2.6.14"
   }

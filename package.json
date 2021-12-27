@@ -1,6 +1,6 @@
 {
   "name": "@wangeditor/editor-for-vue",
-  "version": "0.6.12-4",
+  "version": "0.6.12-5",
   "description": "wangEditor component for vue2.x",
   "author": "wangfupeng1988 <wangfupeng1988@163.com>",
   "contributors": [],
@@ -45,7 +45,7 @@
     "url": "https://github.com/wangeditor-team/we-2021/issues"
   },
   "peerDependencies": {
-    "@wangeditor/editor": "^0.13.3",
+    "@wangeditor/editor": "^0.13.4",
     "vue": "^2.6.14"
   },
   "devDependencies": {
@@ -84,7 +84,7 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "@wangeditor/editor": "^0.13.3",
+    "@wangeditor/editor": "^0.13.4",
     "event-emitter": "^0.3.5",
     "vue-template-compiler": "^2.6.14"
   }

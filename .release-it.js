@@ -1,12 +1,12 @@
 module.exports = {
   git: {
-    tagName: "v${version}",
-    commitMessage: "release: v${version}",
+    tagName: 'v${version}',
+    commitMessage: 'release: v${version}',
     requireCleanWorkingDir: false,
-    requireBranch: "main",
+    requireBranch: 'main',
   },
   hooks: {
-    "before:init": ["git pull origin main", "npm run test"],
+    'before:init': ['git pull origin main', 'yarn test'],
   },
   npm: {
     publish: false,

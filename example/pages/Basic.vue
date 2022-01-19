@@ -1,4 +1,9 @@
-<template>
+<script>
+import Vue from 'vue';
+import { getEditor, removeEditor, Editor, Toolbar } from '../../src/index';
+
+export default Vue.extend({
+  template: `
   <div>
     <div>
       <button @click="onToggleReadOnly">toggle readOnly</button>
@@ -34,18 +39,12 @@
       <pre v-html="curContentStr"></pre>
     </div>
   </div>
-</template>
-<script>
-import Vue from 'vue';
-import { getEditor, removeEditor, Editor, Toolbar } from '../../src/index';
-
-export default Vue.extend({
+`,
   components: { Editor, Toolbar },
   data() {
     return {
       //【注意】1. editorId 用于 Toolbar 和 Editor 的关联，保持一致。2. 多个编辑器时，每个的 editorId 要唯一
       editorId: 'w-e-1001',
-
       toolbarConfig: {},
       defaultContent: [{ type: 'paragraph', children: [{ text: 'basic demo' }] }],
       editorConfig: {

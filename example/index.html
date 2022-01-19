@@ -18,7 +18,11 @@
       href="https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/css/style.css"
       rel="stylesheet"
     />
-    <script src="https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/index.js"></script>
+    <script>
+      window.editor = window.wangEditor;
+      console.log(window, window.editor);
+    </script>
   </head>
   <body>
     <div id="App"></div>

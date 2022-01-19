@@ -1,4 +1,10 @@
-<template>
+<script>
+import Vue from 'vue';
+import { getEditor, removeEditor, Editor, Toolbar } from '../../src/index';
+
+export default Vue.extend({
+  //【注意】单独写 <template>...</template> 时，rollup 打包完浏览器运行时报错，所以先在这里写 template
+  template: `
   <div>
     <div style="border: 1px solid #ccc; margin-top: 10px">
       <Toolbar
@@ -17,17 +23,7 @@
       />
     </div>
   </div>
-</template>
-<script>
-import Vue from 'vue';
-import { getEditor, removeEditor, Editor, Toolbar } from '../../src/index';
-
-export default Vue.extend({
-  //【注意】单独写 <template>...</template> 时，rollup 打包完浏览器运行时报错，所以先在这里写 template
-  template: `
-    
   `,
-
   components: { Editor, Toolbar },
   data() {
     return {

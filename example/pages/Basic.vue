@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+import { IDomEditor } from '@wangeditor/editor';
 import Vue from 'vue';
 import { getEditor, removeEditor, Editor, Toolbar } from '../../src/index';
 
@@ -23,6 +24,7 @@ export default Vue.extend({
         :editorId="editorId"
         :defaultConfig="editorConfig"
         :defaultContent="defaultContent"
+        :defaultHtml="defaultHtml"
         :mode="mode"
         @onCreated="onCreated"
         @onChange="onChange"
@@ -46,7 +48,10 @@ export default Vue.extend({
       //【注意】1. editorId 用于 Toolbar 和 Editor 的关联，保持一致。2. 多个编辑器时，每个的 editorId 要唯一
       editorId: 'w-e-1001',
       toolbarConfig: {},
-      defaultContent: [{ type: 'paragraph', children: [{ text: 'basic demo' }] }],
+      //编辑器默认内容 - JSON格式 { type: 'paragraph', children: [{ text: 'basic demo' }] }
+      defaultContent: [],
+      // 编辑器默认内容 - HTML 格式
+      defaultHtml: '<p>hello&nbsp;<strong>world</strong></p>\n<p><br></p>',
       editorConfig: {
         placeholder: '请输入内容123...',
         // 菜单配置
@@ -56,7 +61,7 @@ export default Vue.extend({
             fieldName: 'vue-demo-fileName',
           },
           insertImage: {
-            checkImage(src, alt, href) {
+            checkImage(src: string, alt: string, href: string) {
               if (src.indexOf('http') !== 0) {
                 return '图片网址必须以 http/https 开头';
               }
@@ -78,29 +83,29 @@ export default Vue.extend({
   mounted() {},
   methods: {
     //【注意】vue 和 React 不一样，无法在 props 传递事件，所以 callbacks 只能单独定义，通过事件传递
-    onCreated(editor) {
+    onCreated(editor: IDomEditor) {
       // console.log('onCreated', editor)
     },
-    onChange(editor) {
+    onChange(editor: IDomEditor) {
       console.log('onChange', editor.children);
-      this.curContent = editor.children;
+      this.curContent = editor.children as any;
     },
-    onDestroyed(editor) {
+    onDestroyed(editor: IDomEditor) {
       console.log('onDestroyed', editor);
     },
-    onMaxLength(editor) {
+    onMaxLength(editor: IDomEditor) {
       console.log('onMaxLength', editor);
     },
-    onFocus(editor) {
+    onFocus(editor: IDomEditor) {
       console.log('onFocus', editor);
     },
-    onBlur(editor) {
+    onBlur(editor: IDomEditor) {
       console.log('onBlur', editor);
     },
-    customAlert(info, type) {
+    customAlert(info: string, type: string) {
       window.alert(`customAlert in Vue demo\n${type}:\n${info}`);
     },
-    customPaste(editor, event, callback) {
+    customPaste(editor: IDomEditor, event: any, callback: any) {
       // console.log('paste event', event)
       // editor.insertText('xxx')
       // // 返回值（注意，vue 事件的返回值，不能用 return）

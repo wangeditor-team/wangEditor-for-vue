@@ -1,0 +1,27 @@
+name: build project
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'master'
+      - 'dev'
+      - 'feature-*'
+      - 'fix-*'
+      - 'hotfix-*'
+      - 'refactor-*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - run: yarn
+      - run: yarn --version
+      - run: node --version
+      - run: yarn test
+      - run: yarn build

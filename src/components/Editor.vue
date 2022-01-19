@@ -16,7 +16,7 @@ export default Vue.extend({
     return h('div', { ref: 'box' });
   },
   name: 'Editor',
-  props: ['editorId', 'defaultContent', 'defaultConfig', 'mode'],
+  props: ['editorId', 'defaultContent', 'defaultConfig', 'mode', 'defaultHtml'],
   created() {
     if (this.editorId == null) {
       throw new Error('Need `editorId` props when create <Editor/> component');
@@ -33,6 +33,7 @@ export default Vue.extend({
 
       createEditor({
         selector: this.$refs.box as Element,
+        html: this.defaultHtml || '',
         config: {
           ...defaultConfig,
           onCreated: (editor) => {

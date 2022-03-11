@@ -31,6 +31,11 @@ export default Vue.extend({
 
       const defaultConfig = this.defaultConfig || {};
 
+      const { JSON, Array } = window;
+      const defaultContent = JSON.stringify(
+        Array.isArray(this.defaultContent) ? this.defaultContent : []
+      );
+
       createEditor({
         selector: this.$refs.box as Element,
         html: this.defaultHtml || '',
@@ -103,7 +108,7 @@ export default Vue.extend({
             return res;
           },
         },
-        content: this.defaultContent || [],
+        content: JSON.parse(defaultContent),
         mode: this.mode || 'default',
       });
     },

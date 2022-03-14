@@ -31,7 +31,6 @@ export default Vue.extend({
 
       const defaultConfig = this.defaultConfig || {};
 
-      const { JSON, Array } = globalThis;
       const defaultContent = JSON.stringify(
         Array.isArray(this.defaultContent) ? this.defaultContent : []
       );

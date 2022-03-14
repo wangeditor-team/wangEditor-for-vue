@@ -11,12 +11,12 @@ const { input, output = {}, plugins = [] } = commonConfig;
 
 const finalPlugins = [
   ...plugins,
-  babel({
-    babelHelpers: 'runtime',
-    exclude: 'node_modules/**',
-    include: 'src/**',
-    extensions,
-  }),
+  // babel({
+  //   babelHelpers: 'runtime',
+  //   exclude: 'node_modules/**',
+  //   include: 'src/**',
+  //   extensions,
+  // }),
   postcss({
     plugins: [
       autoprefixer(),

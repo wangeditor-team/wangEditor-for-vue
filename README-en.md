@@ -6,98 +6,16 @@
 
 ## Introduction
 
-An out-of-the-box [vue2 component](https://www.wangeditor.com/v5/guide/for-frame.html#vue2)
+An out-of-the-box [Vue2 component](https://www.wangeditor.com/v5/guide/for-frame.html#vue2)
 based on the [wangEditor v5](https://www.wangeditor.com/v5/guide/for-frame.html#vue2)
 
 ## Installation
 
-1. Install the `wangeditor` core package
-
 ```shell
 yarn add @wangeditor/editor
-```
-
-2. Install the current component package
-
-```shell
 yarn add @wangeditor/editor-for-vue
 ```
 
 ## Usage
 
-### Template
-
-```html
-<div>
-  <div>
-    <button @click="insertText">insert text</button>
-  </div>
-  <div style="border: 1px solid #ccc;">
-    <!-- toolbar -->
-    <Toolbar
-      style="border-bottom: 1px solid #ccc"
-      :editorId="editorId"
-      :defaultConfig="toolbarConfig"
-    />
-
-    <!-- editor -->
-    <Editor
-      style="height: 500px"
-      :editorId="editorId"
-      :defaultConfig="editorConfig"
-      :defaultContent="getDefaultContent"
-      @onChange="onChange"
-    />
-  </div>
-</div>
-```
-
-### Script
-
-```ts
-import Vue from 'vue';
-import '@wangeditor/editor/dist/css/style.css';
-import { Editor, Toolbar, getEditor, removeEditor } from '@wangeditor/editor-for-vue';
-import cloneDeep from 'lodash.clonedeep';
-
-export default Vue.extend({
-  components: { Editor, Toolbar },
-  data() {
-    return {
-      // Particular attention:
-      // 1. `editorId` is used to relate Toolbar and Editor
-      // 2. When you create multiple editors in one page, every editor must be unique
-      editorId: 'w-e-1',
-      toolbarConfig: {},
-      defaultContent: [],
-      editorConfig: {
-        placeholder: 'Type your text',
-      },
-      curContent: [],
-    };
-  },
-
-  computed: {
-    // Deep clone `content`
-    getDefaultContent() {
-      return cloneDeep(this.defaultContent);
-    },
-  },
-
-  methods: {
-
-    onChange(editor) {
-      console.log('onChange', editor.children);
-      this.curContent = editor.children;
-    },
-    // Timely destroy editor
-    beforeDestroy() {
-      const editor = getEditor(this.editorId);
-      if (editor == null) return;
-
-      // Destroy and remove editor
-      editor.destroy();
-      removeEditor(this.editorId);
-    },
-});
-```
+[Usage doc](https://www.wangeditor.com/v5/en/guide/for-frame.html#vue2)

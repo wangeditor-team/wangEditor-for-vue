@@ -1,8 +1,8 @@
 <script lang="ts">
 import Vue from 'vue';
-import { createEditor } from '@wangeditor/editor';
+import { createEditor, SlateTransforms, SlateEditor } from '@wangeditor/editor';
 import emitter from '../utils/emitter';
-import { recordEditor } from '../utils/editor-map';
+import { recordEditor, getEditor } from '../utils/editor-map';
 
 function genErrorInfo(fnName: string) {
   let info = `请使用 '@${fnName}' 事件，不要放在 props 中`;
@@ -16,7 +16,12 @@ export default Vue.extend({
     return h('div', { ref: 'box' });
   },
   name: 'Editor',
-  props: ['editorId', 'defaultContent', 'defaultConfig', 'mode', 'defaultHtml'],
+  data() {
+    return {
+      curValue: '',
+    };
+  },
+  props: ['editorId', 'defaultContent', 'defaultConfig', 'mode', 'defaultHtml', 'value'], // value 用于自定义 v-model
   created() {
     if (this.editorId == null) {
       throw new Error('Need `editorId` props when create <Editor/> component');
@@ -25,7 +30,55 @@ export default Vue.extend({
   mounted() {
     this.create();
   },
+  watch: {
+    // 监听 'value' 属性变化 - value 用于自定义 v-model
+    value(newVal) {
+      const isEqual = newVal === this.curValue
+      if (isEqual) return // 和当前内容一样，则忽略
+
+      // 重置 HTML
+      this.setHtml(newVal);
+    },
+  },
   methods: {
+    // 重置 HTML
+    setHtml(newHtml: string) {
+      const editor = getEditor(this.editorId);
+      if (editor == null) return;
+
+      // 记录编辑器当前状态
+      const isEditorDisabled = editor.isDisabled();
+      const isEditorFocused = editor.isFocused();
+      const editorSelectionStr = JSON.stringify(editor.selection);
+
+      // 删除并重新设置 HTML
+      editor.enable();
+      editor.focus();
+      editor.select([]);
+      editor.deleteFragment();
+      // @ts-ignore
+      SlateTransforms.setNodes(editor, { type: 'paragraph' }, { mode: 'highest' });
+      editor.dangerouslyInsertHtml(newHtml);
+
+      // 恢复编辑器状态
+      if (!isEditorFocused) {
+        editor.deselect();
+        editor.blur();
+        return;
+      }
+      if (isEditorDisabled) {
+        editor.deselect();
+        editor.disable();
+        return;
+      }
+      try {
+        editor.select(JSON.parse(editorSelectionStr)); // 选中原来的位置
+      } catch (ex) {
+        editor.select(SlateEditor.start(editor, [])); // 选中开始
+      }
+    },
+
+    // 创建 editor
     create() {
       if (this.$refs.box == null) return;
 
@@ -37,7 +90,7 @@ export default Vue.extend({
 
       createEditor({
         selector: this.$refs.box as Element,
-        html: this.defaultHtml || '',
+        html: this.defaultHtml || this.value || '',
         config: {
           ...defaultConfig,
           onCreated: (editor) => {
@@ -54,6 +107,10 @@ export default Vue.extend({
             }
           },
           onChange: (editor) => {
+            const editorHtml = editor.getHtml()
+            this.curValue = editorHtml // 记录当前 html 内容
+            this.$emit('input', editorHtml); // 用于自定义 v-model
+
             this.$emit('onChange', editor);
             if (defaultConfig.onChange) {
               const info = genErrorInfo('onChange');

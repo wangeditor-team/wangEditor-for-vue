@@ -1,29 +1,19 @@
 <script lang="ts">
 import Vue from 'vue';
-import { createToolbar } from '@wangeditor/editor';
-import emitter from '../utils/emitter';
-import { getEditor } from '../utils/editor-map';
+import { createToolbar, DomEditor } from '@wangeditor/editor';
 
 export default Vue.extend({
   name: 'Toolbar',
   render(h) {
     return h('div', { ref: 'box' });
   },
-  props: ['editorId', 'defaultConfig', 'mode'],
-  created() {
-    if (this.editorId == null) {
-      throw new Error('Need `editorId` props when create <Editor/> component');
-    }
-    // 当 editor 创建时，创建 toolbar
-    emitter.on(`w-e-created-${this.editorId}`, this.create);
-  },
+  props: ['editor', 'defaultConfig', 'mode'],
   methods: {
     // 创建 toolbar
-    create() {
+    create(editor: any) {
       if (this.$refs.box == null) return;
-
-      const editor = getEditor(this.editorId);
       if (editor == null) return;
+      if (DomEditor.getToolbar(editor)) return // 不重复创建
 
       createToolbar({
         editor,
@@ -33,9 +23,14 @@ export default Vue.extend({
       });
     },
   },
-  beforeDestroy() {
-    // 组件销毁及时 off 自定义事件，防止内存泄漏
-    emitter.off(`w-e-created-${this.editorId}`, this.create);
-  },
+  watch: {
+    editor: {
+      handler(e) {
+        if (e == null) return;
+        this.create(e);
+      },
+      immediate: true,
+    }
+  }
 });
 </script>

@@ -1,6 +1,6 @@
 <script>
 import Vue from 'vue';
-import { getEditor, removeEditor, Editor, Toolbar } from '../../src/index';
+import { Editor, Toolbar } from '../../src/index';
 
 export default Vue.extend({
   //【注意】单独写 <template>...</template> 时，rollup 打包完浏览器运行时报错，所以先在这里写 template
@@ -10,15 +10,16 @@ export default Vue.extend({
       <div style="border: 1px solid #ccc; margin-top: 10px">
         <Toolbar
           style="border-bottom: 1px solid #ccc"
-          :editorId="editorId"
+          :editor="editor"
           :defaultConfig="toolbarConfig"
         />
 
         <Editor
           style="height: 500px"
-          :editorId="editorId"
           :defaultConfig="editorConfig"
           v-model="valueHtml"
+          @onCreated="onCreated"
+          @onChange="onChange"
         />
       </div>
     </div>
@@ -26,8 +27,7 @@ export default Vue.extend({
   components: { Editor, Toolbar },
   data() {
     return {
-      //【注意】1. editorId 用于 Toolbar 和 Editor 的关联，保持一直。2. 多个编辑器时，每个的 editorId 要唯一
-      editorId: `w-e-${Date.now().toString().slice(-5)}`,
+      editor: null,
       toolbarConfig: {
         // 工具栏配置
       },
@@ -42,16 +42,24 @@ export default Vue.extend({
       this.valueHtml = '<p>hello world</p>'
     }, 1500);
   },
-  methods: {},
+  methods: {
+    onCreated(editor) {
+      // console.log('onCreated', editor)
+      this.editor = Object.seal(editor) // 注意，一定要用 Object.seal() 否则会报错
+    },
+    onChange(editor) {
+      console.log('onChange', editor.getHtml());
+      this.curContent = editor.children;
+    },
+  },
 
   // 及时销毁 editor
   beforeDestroy() {
-    const editor = getEditor(this.editorId);
+    const editor = this.editor;
     if (editor == null) return;
 
     // 销毁，并移除 editor
     editor.destroy();
-    removeEditor(this.editorId);
   },
 });
 </script>

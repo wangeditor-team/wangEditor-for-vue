@@ -1,8 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import { createEditor, SlateTransforms, SlateEditor } from '@wangeditor/editor';
-import emitter from '../utils/emitter';
-import { recordEditor, getEditor } from '../utils/editor-map';
 
 function genErrorInfo(fnName: string) {
   let info = `请使用 '@${fnName}' 事件，不要放在 props 中`;
@@ -19,14 +17,10 @@ export default Vue.extend({
   data() {
     return {
       curValue: '',
+      editor: null,
     };
   },
-  props: ['editorId', 'defaultContent', 'defaultConfig', 'mode', 'defaultHtml', 'value'], // value 用于自定义 v-model
-  created() {
-    if (this.editorId == null) {
-      throw new Error('Need `editorId` props when create <Editor/> component');
-    }
-  },
+  props: ['defaultContent', 'defaultConfig', 'mode', 'defaultHtml', 'value'], // value 用于自定义 v-model
   mounted() {
     this.create();
   },
@@ -43,7 +37,7 @@ export default Vue.extend({
   methods: {
     // 重置 HTML
     setHtml(newHtml: string) {
-      const editor = getEditor(this.editorId);
+      const editor = this.editor as any;
       if (editor == null) return;
 
       // 记录编辑器当前状态
@@ -94,11 +88,7 @@ export default Vue.extend({
         config: {
           ...defaultConfig,
           onCreated: (editor) => {
-            // 记录 editor
-            recordEditor(this.editorId, editor);
-
-            // 触发自定义事件（如创建 toolbar）
-            emitter.emit(`w-e-created-${this.editorId}`);
+            this.editor = Object.seal(editor) as any; // 注意，一定要用 Object.seal() 否则会报错
 
             this.$emit('onCreated', editor);
             if (defaultConfig.onCreated) {

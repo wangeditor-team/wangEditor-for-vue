@@ -1,7 +1,7 @@
 <script lang="ts">
 import { IDomEditor } from '@wangeditor/editor';
 import Vue from 'vue';
-import { getEditor, removeEditor, Editor, Toolbar } from '../../src/index';
+import { Editor, Toolbar } from '../../src/index';
 
 export default Vue.extend({
   template: `
@@ -14,14 +14,13 @@ export default Vue.extend({
     <div style="border: 1px solid #ccc; margin-top: 10px">
       <Toolbar
         style="border-bottom: 1px solid #ccc"
-        :editorId="editorId"
+        :editor="editor"
         :defaultConfig="toolbarConfig"
         :mode="mode"
       />
 
       <Editor
         style="height: 500px"
-        :editorId="editorId"
         :defaultConfig="editorConfig"
         :defaultContent="defaultContent"
         :defaultHtml="defaultHtml"
@@ -45,8 +44,7 @@ export default Vue.extend({
   components: { Editor, Toolbar },
   data() {
     return {
-      //【注意】1. editorId 用于 Toolbar 和 Editor 的关联，保持一致。2. 多个编辑器时，每个的 editorId 要唯一
-      editorId: 'w-e-1001',
+      editor: null,
       toolbarConfig: {},
       //编辑器默认内容 - JSON格式 { type: 'paragraph', children: [{ text: 'basic demo' }] }
       defaultContent: [],
@@ -85,6 +83,7 @@ export default Vue.extend({
     //【注意】vue 和 React 不一样，无法在 props 传递事件，所以 callbacks 只能单独定义，通过事件传递
     onCreated(editor: IDomEditor) {
       // console.log('onCreated', editor)
+      this.editor = Object.seal(editor) as any // 注意，一定要用 Object.seal() 否则会报错
     },
     onChange(editor: IDomEditor) {
       console.log('onChange', editor.children);
@@ -114,7 +113,7 @@ export default Vue.extend({
     },
 
     onToggleReadOnly() {
-      const editor = getEditor(this.editorId);
+      const editor = this.editor as any;
       if (editor == null) return;
 
       if (editor.getConfig().readOnly) {
@@ -124,7 +123,7 @@ export default Vue.extend({
       }
     },
     onGetHtml() {
-      const editor = getEditor(this.editorId);
+      const editor = this.editor as any;
       if (editor == null) return;
 
       // 使用 editor API
@@ -134,12 +133,9 @@ export default Vue.extend({
 
   // 及时销毁 editor
   beforeDestroy() {
-    const editor = getEditor(this.editorId);
+    const editor = this.editor as any;
     if (editor == null) return;
-
-    // 销毁，并移除 editor
     editor.destroy();
-    removeEditor(this.editorId);
   },
 });
 </script>

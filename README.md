@@ -6,7 +6,7 @@
 
 ## 介绍
 
-基于 [wangEditor](https://www.wangeditor.com/v5/) 封装的开箱即用的 [Vue2 组件](https://www.wangeditor.com/v5/guide/for-frame.html#vue2)
+基于 [wangEditor](https://www.wangeditor.com/) 封装的开箱即用的 [Vue2 组件](https://www.wangeditor.com/v5/for-frame.html#vue2)
 
 ## 安装
 
@@ -17,4 +17,4 @@ yarn add @wangeditor/editor-for-vue
 
 ## 使用
 
-参考[文档](https://www.wangeditor.com/v5/guide/for-frame.html#vue2)
+参考[文档](https://www.wangeditor.com/v5/for-frame.html#vue2)

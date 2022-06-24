@@ -1,6 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
-import { createEditor, SlateTransforms, SlateEditor } from '@wangeditor/editor';
+import { createEditor } from '@wangeditor/editor';
 
 function genErrorInfo(fnName: string) {
   let info = `请使用 '@${fnName}' 事件，不要放在 props 中`;

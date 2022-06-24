@@ -27,8 +27,8 @@ export default Vue.extend({
   watch: {
     // 监听 'value' 属性变化 - value 用于自定义 v-model
     value(newVal) {
-      const isEqual = newVal === this.curValue
-      if (isEqual) return // 和当前内容一样，则忽略
+      const isEqual = newVal === this.curValue;
+      if (isEqual) return; // 和当前内容一样，则忽略
 
       // 重置 HTML
       this.setHtml(newVal);
@@ -39,38 +39,7 @@ export default Vue.extend({
     setHtml(newHtml: string) {
       const editor = this.editor as any;
       if (editor == null) return;
-
-      // 记录编辑器当前状态
-      const isEditorDisabled = editor.isDisabled();
-      const isEditorFocused = editor.isFocused();
-      const editorSelectionStr = JSON.stringify(editor.selection);
-
-      // 删除并重新设置 HTML
-      editor.enable();
-      editor.focus();
-      editor.select([]);
-      editor.deleteFragment();
-      // @ts-ignore
-      SlateTransforms.setNodes(editor, { type: 'paragraph' }, { mode: 'highest' });
-      editor.dangerouslyInsertHtml(newHtml);
-
-      // 恢复编辑器状态
-      if (!isEditorFocused) {
-        editor.deselect();
-        editor.blur();
-      }
-      if (isEditorDisabled) {
-        editor.deselect();
-        editor.disable();
-      }
-
-      if (editor.isFocused()) {
-        try {
-          editor.select(JSON.parse(editorSelectionStr)); // 选中原来的位置
-        } catch (ex) {
-          editor.select(SlateEditor.start(editor, [])); // 选中开始
-        }
-      }
+      editor.setHtml(newHtml);
     },
 
     // 创建 editor
@@ -98,8 +67,8 @@ export default Vue.extend({
             }
           },
           onChange: (editor) => {
-            const editorHtml = editor.getHtml()
-            this.curValue = editorHtml // 记录当前 html 内容
+            const editorHtml = editor.getHtml();
+            this.curValue = editorHtml; // 记录当前 html 内容
             this.$emit('input', editorHtml); // 用于自定义 v-model
 
             this.$emit('onChange', editor);

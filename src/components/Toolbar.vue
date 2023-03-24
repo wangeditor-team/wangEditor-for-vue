@@ -8,6 +8,9 @@ export default Vue.extend({
     return h('div', { ref: 'box' });
   },
   props: ['editor', 'defaultConfig', 'mode'],
+  mounted () {
+    this.create(this.editor);
+  },
   methods: {
     // 创建 toolbar
     create(editor: any) {

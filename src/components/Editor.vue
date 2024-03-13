@@ -18,6 +18,7 @@ export default Vue.extend({
     return {
       curValue: '',
       editor: null,
+      handles: []
     };
   },
   props: ['defaultContent', 'defaultConfig', 'mode', 'defaultHtml', 'value'], // value 用于自定义 v-model
@@ -38,7 +39,12 @@ export default Vue.extend({
     // 重置 HTML
     setHtml(newHtml: string) {
       const editor = this.editor as any;
-      if (editor == null) return;
+      if (editor == null) {
+        this.handles.push(() => {
+          this.setHtml(newHtml);
+        })
+        return
+      };
       editor.setHtml(newHtml);
     },
 
@@ -59,7 +65,11 @@ export default Vue.extend({
           ...defaultConfig,
           onCreated: (editor) => {
             this.editor = Object.seal(editor) as any; // 注意，一定要用 Object.seal() 否则会报错
-
+            // 解决setHtml时 editor还未创建的bug
+            while (this.handles.length > 0) {
+              const handle = this.handles.pop()
+              handle();
+            }
             this.$emit('onCreated', editor);
             if (defaultConfig.onCreated) {
               const info = genErrorInfo('onCreated');
